@@ -18,6 +18,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,11 +46,22 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun JuntaVecinosApp() {
 
+        var pantallaActual by remember { mutableStateOf("Inicio")}
 
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            PantallaInicio(
-                modifier = Modifier.padding(innerPadding)
-            )
+
+            when (pantallaActual){
+                "Inicio" -> PantallaInicio(
+                    modifier = Modifier.padding(innerPadding),
+                    onReservasClick = {
+                        pantallaActual = "Reservas"
+                    }
+                )
+
+                "Reservas" -> PantallaReservas(
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
         }
 
 }
@@ -57,11 +69,13 @@ fun JuntaVecinosApp() {
 
 
 @Composable
-fun PantallaInicio(modifier: Modifier = Modifier) {
+fun PantallaInicio(
+    modifier: Modifier = Modifier,
+    onReservasClick: () -> Unit = {}) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)
     ) {
         Text(
             text = "Junta de Vecinos",
@@ -71,7 +85,7 @@ fun PantallaInicio(modifier: Modifier = Modifier) {
             text = "Gestion de arriendos y finanzas",
             style = MaterialTheme.typography.bodyLarge)
 
-        Button(onClick = { },
+        Button(onClick = onReservasClick,
             modifier = Modifier.fillMaxWidth(0.7f)){
             Text(text = "Reservas")
         }
@@ -79,6 +93,11 @@ fun PantallaInicio(modifier: Modifier = Modifier) {
         Button(onClick = { },
             modifier = Modifier.fillMaxWidth(0.7f)) {
             Text(text = "Finanzas")
+        }
+
+        Button(onClick = { },
+            modifier = Modifier.fillMaxWidth(0.7f)){
+            Text(text = "Informacion")
         }
     }
 }
@@ -89,4 +108,11 @@ fun PantallaInicioPreview() {
     JuntaVecinosTheme {
         PantallaInicio()
     }
+}
+
+@Composable
+fun PantallaReservas(modifier: Modifier = Modifier,
+                     onVolverClick: () -> Unit = {}){
+    Text(text = "Mis Reservas",
+        modifier = modifier)
 }
